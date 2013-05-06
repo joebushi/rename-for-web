@@ -1,6 +1,24 @@
 #!/bin/bash
 # Rename all given files making them web-friendly
-# I.e., ascii, lowercase, remove punctuation and dashes for spaces
+# I.e., ascii, lowercase, remove punctuation and replace spaces with dashes
+
+# Alert user as to whether original files should be backed up or not
+alert=$( osascript \
+-e 'tell application "Finder"' \
+-e 'activate' \
+-e 'set dialog_result to display dialog "Do you want to backup original files?" with title "Warning" buttons {"Yes","No"}' \
+-e 'end tell' \
+-e 'get button returned of dialog_result'
+)
+echo $alert
+
+if [[ $alert == "Yes" ]]; then
+    # Use cp and retain original files
+    cmd="cp"
+else
+    # Use mv and rename files
+    cmd="mv"
+fi
 
 for f in "$@" ; do
 
@@ -35,6 +53,6 @@ for f in "$@" ; do
 
     # Automator requires full path for rename
     # TODO: check for duplicate names and increment accordingly
-    mv "$f" "$dir$new_filename"
+    $cmd "$f" "$dir$new_filename"
 
 done
