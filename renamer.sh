@@ -6,7 +6,7 @@
 alert=$( osascript \
 -e 'tell application "Finder"' \
 -e 'activate' \
--e 'set dialog_result to display dialog "Do you want to backup original files?" with title "Warning" buttons {"Yes","No"}' \
+-e 'set dialog_result to display dialog "Do you want to retain original files?" with title "Warning" buttons {"Yes","No"}' \
 -e 'end tell' \
 -e 'get button returned of dialog_result'
 )
@@ -42,7 +42,7 @@ for f in "$@" ; do
     # Replace punctuation with dash character
     # Remove duplicate dashes
     # And strip dash from end of string
-    new_filename=`sed -E -e "s/[ _[:punct:]]/-/g" -e "s/(-+)/-/g" -e "s/-$//g" <<< "$new_filename"`
+    new_filename=`sed -E -e "s/[ _[:punct:]]/-/g" -e "s/(-+)/-/g" -e "s/(^-|-$)//g" <<< "$new_filename"`
 
     # Lowercase string
     new_filename=`tr '[A-Z]' '[a-z]' <<< "$new_filename$ext"`
