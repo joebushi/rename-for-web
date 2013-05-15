@@ -1,42 +1,63 @@
-#!/bin/bash
+#!/usr/bin/env sh
 # Rename all given files making them web-friendly
 # I.e., ascii, lowercase, remove punctuation and replace spaces with dashes
-
 
 # If the filename already exists we need to generate a unique one
 find_unique_name () {
     # Increment for file name
-    i=1
+    local i=1
 
-    # Find a unique file name by adding an increment
-    until [ ! -e "$new_filename" ]
+    # Concat pieces into file path to check for existence
+    test_filename="$dir$new_filename$ext"
+
+    # Generate a file name until we find a unique one
+    until [ ! -e "$test_filename" ]
     do
-        # TODO: check for an existing number on end of file name
-        #       if exists take that and increment
+        # Extract number from end
+        number=`grep -Eo "[0-9]+$" <<< "$new_filename"`
 
-        # Pad numbers under 10
-        local padding=""
-        if [[ $i -lt 10 ]]; then
-            padding=0
+        # Store original number for replace
+        # local original_number=number
+        original_number="$number"
+
+        # Strip leading zero to avoid octals
+        number=`sed -E -e 's/^0*//' <<< "$number"`
+
+        # Increment new number
+        let new_number=number+1
+
+        # Pad numbers with zero as needed
+        # local padding=""
+        if [[ $new_number -lt 10 ]]; then
+            new_number="0$new_number"
+        fi
+
+        # Add separator except when file name is a number
+        separator="-"
+        if [[ "$new_filename" =~ [^a-z] ]]; then
+            separator=""
         fi
 
         # File and directories require different replacement patterns
         # Note double quotes required for sed variable interpolation
-        if [[ $new_filename =~ \. ]]; then
-            new_filename=`sed -E "s/(\.)/-$padding$i\1/" <<< $new_filename`
-        else
-            new_filename=`sed -E "s/$/-$padding$i/" <<< $new_filename`
-        fi
+        new_filename=`sed -E "s/-?$original_number$/$separator$new_number/" <<< $new_filename`
+
+        # Concat pieces into file path to check existence
+        test_filename="$dir$new_filename$ext"
 
         # Increment the counter
-        let i=i+1
+        # Store new increment if needed
+        if [[ $new_number -gt 0 ]]; then
+            let i=new_number
+        fi
     done
 
-    # Okay we have a unique filename
+    # Okay we have a unique file name in $new_filename
     # Reset the counter
     i=1
-    # return
+    return
 }
+
 
 # # Alert user as to whether original files should be backed up or not
 # alert=$( osascript \
@@ -74,13 +95,17 @@ for f in "$@" ; do
     new_filename=`sed -E -e "s/[ _[:punct:]]/-/g" -e "s/(-+)/-/g" -e "s/(^-|-$)//g" <<< "$new_filename"`
 
     # Lowercase string
-    new_filename=`tr '[A-Z]' '[a-z]' <<< "$new_filename$ext"`
-    new_filename="$dir$new_filename"
+    new_filename=`tr '[A-Z]' '[a-z]' <<< "$new_filename"`
+    ext=`tr '[A-Z]' '[a-z]' <<< "$ext"`
 
+    # Check that filename is unique if not generate one
+    # Takes $dir, $new_filename and $ext
+    find_unique_name
 
+    # Concat full path to file
     # Note: Automator requires full path for rename
     #       and quotes around files with spaces
-    find_unique_name
+    new_filename="$dir$new_filename$ext"
 
     # if [[ $alert == "Yes" ]]; then
         # Use cp and retain original files
