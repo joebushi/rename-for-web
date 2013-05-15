@@ -103,7 +103,7 @@
 				<key>isViewVisible</key>
 				<true/>
 				<key>location</key>
-				<string>265.000000:995.000000</string>
+				<string>265.000000:622.000000</string>
 				<key>nibPath</key>
 				<string>/System/Library/Automator/Get Specified Finder Items.action/Contents/Resources/English.lproj/main.nib</string>
 			</dict>
@@ -219,15 +219,15 @@ find_unique_name () {
 }
 
 
-# # Alert user as to whether original files should be backed up or not
-# alert=$( osascript \
-# -e 'tell application "Finder"' \
-# -e 'activate' \
-# -e 'set dialog_result to display dialog "Do you want to retain original files?" with title "Warning" buttons {"Yes","No"}' \
-# -e 'end tell' \
-# -e 'get button returned of dialog_result'
-# )
-# echo $alert
+# Alert user as to whether original files should be backed up or not
+alert=$( osascript \
+-e 'tell application "Finder"' \
+-e 'activate' \
+-e 'set dialog_result to display dialog "Do you want to retain original files?" with title "Warning" buttons {"Yes","No"}' \
+-e 'end tell' \
+-e 'get button returned of dialog_result'
+)
+echo $alert
 
 for f in "$@" ; do
 
@@ -267,8 +267,19 @@ for f in "$@" ; do
     #       and quotes around files with spaces
     new_filename="$dir$new_filename$ext"
 
-    # Rename the files
-    mv "$f" $new_filename
+    if [[ $alert == "Yes" ]]; then
+        # Use cp and retain original files
+        # Add -R option if directory
+        if [[ -d $f ]]; then
+            cmd="cp -R"
+        else
+            cmd="cp"
+        fi
+    else
+        # Use mv and rename files
+        cmd="mv"
+    fi
+    $cmd "$f" $new_filename
 
 done</string>
 					<key>CheckedForUserDefaultShell</key>
@@ -383,7 +394,7 @@ done</string>
 				<key>isViewVisible</key>
 				<true/>
 				<key>location</key>
-				<string>265.000000:757.000000</string>
+				<string>265.000000:384.000000</string>
 				<key>nibPath</key>
 				<string>/System/Library/Automator/Run Shell Script.action/Contents/Resources/English.lproj/main.nib</string>
 			</dict>
@@ -463,7 +474,7 @@ done</string>
 				<key>isViewVisible</key>
 				<true/>
 				<key>location</key>
-				<string>265.000000:282.000000</string>
+				<string>265.000000:201.000000</string>
 				<key>nibPath</key>
 				<string>/System/Library/Automator/View Results.action/Contents/Resources/English.lproj/main.nib</string>
 			</dict>
@@ -473,19 +484,19 @@ done</string>
 	</array>
 	<key>connectors</key>
 	<dict>
-		<key>52413C2C-C015-44B3-986B-90FE7BD39BF2</key>
-		<dict>
-			<key>from</key>
-			<string>8EAE7F97-DA97-4B5B-BB29-D69EF7000306 - 8EAE7F97-DA97-4B5B-BB29-D69EF7000306</string>
-			<key>to</key>
-			<string>A18C8AE0-021B-4380-BEEC-DEC646384F2B - A18C8AE0-021B-4380-BEEC-DEC646384F2B</string>
-		</dict>
-		<key>EAE36E92-91B7-4FAA-80B6-B752DD212D4A</key>
+		<key>15AB2B29-DA83-4817-91A4-1E7F9285F34F</key>
 		<dict>
 			<key>from</key>
 			<string>A18C8AE0-021B-4380-BEEC-DEC646384F2B - A18C8AE0-021B-4380-BEEC-DEC646384F2B</string>
 			<key>to</key>
 			<string>680257F1-D656-4680-906F-DB46B3BA8E22 - 680257F1-D656-4680-906F-DB46B3BA8E22</string>
+		</dict>
+		<key>3A6479BB-7D55-4A4F-8018-C058E189633A</key>
+		<dict>
+			<key>from</key>
+			<string>8EAE7F97-DA97-4B5B-BB29-D69EF7000306 - 8EAE7F97-DA97-4B5B-BB29-D69EF7000306</string>
+			<key>to</key>
+			<string>A18C8AE0-021B-4380-BEEC-DEC646384F2B - A18C8AE0-021B-4380-BEEC-DEC646384F2B</string>
 		</dict>
 	</dict>
 	<key>workflowMetaData</key>

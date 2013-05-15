@@ -11,17 +11,16 @@ find_unique_name () {
     test_filename="$dir$new_filename$ext"
 
     # Generate a file name until we find a unique one
-    until [ ! -e "$test_filename" ]
+    until [[ ! -e $test_filename ]]
     do
         # Extract number from end
         number=`grep -Eo "[0-9]+$" <<< "$new_filename"`
 
         # Store original number for replace
-        # local original_number=number
-        original_number="$number"
+        local original_number="$number"
 
         # Strip leading zero to avoid octals
-        number=`sed -E -e 's/^0*//' <<< "$number"`
+        local number=`sed -E -e 's/^0*//' <<< "$number"`
 
         # Increment new number
         let new_number=number+1
@@ -34,13 +33,13 @@ find_unique_name () {
 
         # Add separator except when file name is a number
         separator="-"
-        if [[ "$new_filename" =~ [^a-z] ]]; then
+        if [[ $new_filename =~ ^[0-9]+$ ]]; then
             separator=""
         fi
 
         # File and directories require different replacement patterns
         # Note double quotes required for sed variable interpolation
-        new_filename=`sed -E "s/-?$original_number$/$separator$new_number/" <<< $new_filename`
+        new_filename=`sed -E -e "s/-?$original_number$/$separator$new_number/" -e 's/^0//' <<< $new_filename`
 
         # Concat pieces into file path to check existence
         test_filename="$dir$new_filename$ext"
@@ -59,15 +58,15 @@ find_unique_name () {
 }
 
 
-# # Alert user as to whether original files should be backed up or not
-# alert=$( osascript \
-# -e 'tell application "Finder"' \
-# -e 'activate' \
-# -e 'set dialog_result to display dialog "Do you want to retain original files?" with title "Warning" buttons {"Yes","No"}' \
-# -e 'end tell' \
-# -e 'get button returned of dialog_result'
-# )
-# echo $alert
+# Alert user as to whether original files should be backed up or not
+alert=$( osascript \
+-e 'tell application "Finder"' \
+-e 'activate' \
+-e 'set dialog_result to display dialog "Do you want to retain original files?" with title "Warning" buttons {"Yes","No"}' \
+-e 'end tell' \
+-e 'get button returned of dialog_result'
+)
+echo $alert
 
 for f in "$@" ; do
 
@@ -107,18 +106,18 @@ for f in "$@" ; do
     #       and quotes around files with spaces
     new_filename="$dir$new_filename$ext"
 
-    # if [[ $alert == "Yes" ]]; then
+    if [[ $alert == "Yes" ]]; then
         # Use cp and retain original files
         # Add -R option if directory
-        if [[ -d "$f" ]]; then
+        if [[ -d $f ]]; then
             cmd="cp -R"
         else
             cmd="cp"
         fi
-    # else
-    #     # Use mv and rename files
-    #     cmd="mv"
-    # fi
+    else
+        # Use mv and rename files
+        cmd="mv"
+    fi
     $cmd "$f" $new_filename
 
 done
