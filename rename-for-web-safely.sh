@@ -118,6 +118,6 @@ for f in "$@" ; do
         # Use mv and rename files
         cmd="mv"
     fi
-    $cmd "$f" $new_filename
+    $cmd "$f" "$new_filename"
 
 done

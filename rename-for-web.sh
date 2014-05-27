@@ -107,6 +107,6 @@ for f in "$@" ; do
     new_filename="$dir$new_filename$ext"
 
     # Rename the files
-    mv "$f" $new_filename
+    mv "$f" "$new_filename"
 
 done
