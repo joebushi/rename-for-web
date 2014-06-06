@@ -9,7 +9,9 @@ Email the desired workflow file to your client, friend and/or family member. Ins
 
 ## TODO
 
-Better determine duplicate files instead of incrementing. Possibly create a service that recursively renames a hierarchy of directories and files. Maybe a little to dangerous?
+Better determine duplicate files instead of incrementing all. Duplicate files with different names can be checked with ```cmp``` and a dailog can be displayed to user as to whether to keep only one.
+
+Possibly create a service that recursively renames a hierarchy of directories and files. Maybe a little to dangerous?
 
 ## Contributors
 
