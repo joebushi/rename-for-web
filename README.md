@@ -7,7 +7,13 @@ The "Rename For Web" OS X Automator service provides a quick and easy way to ren
 
 Email the desired workflow file to your client, friend and/or family member. Instruct them to double-click the  file and choose "install" from the dialog box. Once installed the user can select files in the Finder, right-click and choose "Rename For Web" from the context menu.
 
+### Screencast How-To
+
+[![View screencast on YouTube](http://img.youtube.com/vi/m6WQbB0SvME/0.jpg)](http://www.youtube.com/watch?v=m6WQbB0SvME)
+
 ## TODO
+
+Optimise for Yosemite.
 
 Better determine duplicate files instead of incrementing all. Duplicate files with different names can be checked with ```cmp``` and a dailog can be displayed to user as to whether to keep only one.
 
