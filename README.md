@@ -30,7 +30,7 @@ Rename For Web is released under the [MIT License](http://www.opensource.org/lic
 ## Donations
 Accepting tips via [Gittip][tip] and [Flattr][flattr].
 
-[![Flattr](//img.shields.io/gratipay/joebushi.svg)](https://www.gittip.com/joebushi/)
+[![Flattr](http://img.shields.io/gratipay/joebushi.svg)](https://www.gittip.com/joebushi/)
 [![Flattr](http://api.flattr.com/button/flattr-badge-large.png)][flattr]
 
 [tip]:https://www.gittip.com/joebushi/
