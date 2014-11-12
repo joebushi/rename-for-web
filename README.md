@@ -26,3 +26,12 @@ Accepting pull requests and issues via [GitHub](https://github.com/joebushi/rena
 ## License
 
 Rename For Web is released under the [MIT License](http://www.opensource.org/licenses/MIT).
+
+## Donations
+Accepting tips via [Gittip][tip] and [Flattr][flattr].
+
+[![Flattr](//img.shields.io/gratipay/joebushi.svg)](https://www.gittip.com/joebushi/)
+[![Flattr](http://api.flattr.com/button/flattr-badge-large.png)][flattr]
+
+[tip]:https://www.gittip.com/joebushi/
+[flattr]: https://flattr.com/submit/auto?user_id=joebushi&url=https%3A%2F%2Fgithub.com%2Fmjoebushi%2Frename-for-web
